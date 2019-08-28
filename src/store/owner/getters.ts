@@ -29,4 +29,11 @@ export const getters: GetterTree<OwnerState, RootState> = {
     const res = getters.getOwnerById(id);
     return res ? true : false;
   },
+  getRecieverByPubKeyAddress: (state, getters, rootState, rootGetters) => (
+    pubKeyAddress: string
+  ): boolean => {
+    const peer = rootGetters['reciever/getOwnerByAddress'](pubKeyAddress);
+
+    return peer ? peer.id : undefined;
+  },
 };

@@ -15,7 +15,6 @@
         <b-row>
           <b-col sm="2">Requests</b-col>
           <b-col sm="8">
-            <b-badge>{{arrLength(reciever.data.requests.active)}} active</b-badge>
             <b-button v-b-toggle="'collapse-requests'" class="m-1">show requests</b-button>
             <b-button
               size="sm"
@@ -82,6 +81,12 @@
             </b-collapse>
           </b-col>
         </b-row>
+        <b-row>
+          <b-col sm="2">Actions</b-col>
+          <b-col sm="8">
+            <b-button @click="checkOpenRequests(reciever.id)">Check Open Requests</b-button>
+          </b-col>
+        </b-row>
       </b-card-body>
     </b-card>
     <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
@@ -107,6 +112,7 @@ import DateTag from '../lib/DateTag';
   },
 })
 export default class RecieverDetails extends Vue {
+  @Reciever.Action('checkOpenRequests') checkOpenRequests!: any;
   @Reciever.Getter('getRecieverById') getRecieverByID!: any;
   @Reciever.Getter('getPeerByAddress') getPeerByAddress!: any;
 
@@ -125,33 +131,41 @@ export default class RecieverDetails extends Vue {
     this.infoModal.recieverId = '';
   }
 
-  arrLength(elem: any) {
-    return elem.lenght;
-  }
-
   get openRequests() {
-    const data = this.reciever.data.requests.open.map(item => {
-      Object.setPrototypeOf(item.msg.startDate, DateTag.prototype);
-      Object.setPrototypeOf(item.msg.endDate, DateTag.prototype);
-      return item;
-    });
-    return data;
+    try {
+      const data = this.reciever.data.requests.open.map(item => {
+        Object.setPrototypeOf(item.msg.startDate, DateTag.prototype);
+        Object.setPrototypeOf(item.msg.endDate, DateTag.prototype);
+        return item;
+      });
+      return data;
+    } catch (error) {
+      return [];
+    }
   }
   get activeRequests() {
-    const data = this.reciever.data.requests.active.map(item => {
-      Object.setPrototypeOf(item.msg.startDate, DateTag.prototype);
-      Object.setPrototypeOf(item.msg.endDate, DateTag.prototype);
-      return item;
-    });
-    return data;
+    try {
+      const data = this.reciever.data.requests.active.map(item => {
+        Object.setPrototypeOf(item.msg.startDate, DateTag.prototype);
+        Object.setPrototypeOf(item.msg.endDate, DateTag.prototype);
+        return item;
+      });
+      return data;
+    } catch (error) {
+      return [];
+    }
   }
   get closedRequests() {
-    const data = this.reciever.data.requests.closed.map(item => {
-      Object.setPrototypeOf(item.msg.startDate, DateTag.prototype);
-      Object.setPrototypeOf(item.msg.endDate, DateTag.prototype);
-      return item;
-    });
-    return data;
+    try {
+      const data = this.reciever.data.requests.closed.map(item => {
+        Object.setPrototypeOf(item.msg.startDate, DateTag.prototype);
+        Object.setPrototypeOf(item.msg.endDate, DateTag.prototype);
+        return item;
+      });
+      return data;
+    } catch (error) {
+      return [];
+    }
   }
   get reciever(): DataReciever {
     return this.getRecieverByID(this.$props.recieverId);

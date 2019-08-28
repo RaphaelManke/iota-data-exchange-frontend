@@ -35,7 +35,29 @@
         <hr />
         <b-row>
           <b-col sm="2">Requests</b-col>
-          <b-col sm="8">{{owner.data.subMan.requests}}</b-col>
+          <b-col sm="8">
+            <b-button v-b-toggle="'collapse-requests'" class="m-1">show requests</b-button>
+
+            <b-collapse id="collapse-requests">
+              <b-list-group>
+                <b-list-group-item v-for="sub in subscriptionList" v-bind:key="sub.id">
+                  ID: {{sub.id}}
+                  <br />Peer:
+                  <b-link
+                    :to="{ name: 'recieverDetails', params: { recieverId: getRecieverByPubKeyAddress(sub.peer) }}"
+                  >{{getRecieverByPubKeyAddress(sub.peer)}}</b-link>
+                  <br />
+                  Start: {{sub.startDate}}
+                  <br />
+                  End: {{sub.endDate}}
+                  <br />
+                  <b-button
+                    @click="acceptRequest({ownerId:owner.id, requestId:sub.id})"
+                  >accept Request</b-button>
+                </b-list-group-item>
+              </b-list-group>
+            </b-collapse>
+          </b-col>
         </b-row>
         <hr />
         <b-row>
@@ -54,6 +76,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { DataPublisher, DataReciever, DataOwner } from '@/lib/';
 import { Owner } from '@/namespaces';
 import { any } from 'bluebird';
+import DateTag from '../lib/DateTag';
 @Component({
   components: {},
   props: {
@@ -61,10 +84,22 @@ import { any } from 'bluebird';
   },
 })
 export default class OwnerDetails extends Vue {
-  @Owner.Getter('getOwnerById') getOwnerByID!: any;
+  @Owner.Action('acceptRequest') acceptRequest!: any;
   @Owner.Action('checkRequestAddress') checkRequestAddress!: any;
+  @Owner.Getter('getOwnerById') getOwnerByID!: any;
+  @Owner.Getter('getRecieverByPubKeyAddress') getRecieverByPubKeyAddress!: any;
   arrLength(elem: any) {
     return elem.lenght;
+  }
+  get subscriptionList() {
+    return this.owner.data.subMan.requests.map(e => {
+      return {
+        id: e[0],
+        peer: e[1].pubKeyAddress,
+        startDate: Object.setPrototypeOf(e[1].startDate, DateTag.prototype),
+        endDate: Object.setPrototypeOf(e[1].endDate, DateTag.prototype),
+      };
+    });
   }
   get owner(): DataOwner {
     return this.getOwnerByID(this.$props.ownerId);

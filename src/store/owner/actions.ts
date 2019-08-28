@@ -40,4 +40,17 @@ export const actions: ActionTree<OwnerState, RootState> = {
       commit('updateOwner', data);
     }
   },
+  async acceptRequest(
+    { commit },
+    payload: { ownerId: string; requestId: string }
+  ): Promise<any> {
+    const resp = await Axios.post('/owner/acceptRequest', {
+      id: payload.ownerId,
+      requestId: payload.requestId,
+    });
+    if (resp.status === 200) {
+      const data: any = resp.data;
+      commit('updateOwner', data);
+    }
+  },
 };

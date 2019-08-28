@@ -30,6 +30,13 @@ export const actions: ActionTree<RecieverState, RootState> = {
       commit('updateReciever', data);
     }
   },
+  async checkOpenRequests({ commit }, id: string): Promise<any> {
+    const resp = await Axios.post('/reciever/checkOpenRequests', { id: id });
+    if (resp.status === 200) {
+      const data: any = resp.data;
+      commit('updateReciever', data);
+    }
+  },
   async requestAccess(
     { commit },
     request: { recieverId: string; start: string; end: string; peer: string }

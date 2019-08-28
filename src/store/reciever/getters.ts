@@ -28,4 +28,7 @@ export const getters: GetterTree<RecieverState, RootState> = {
     const peer = rootGetters['owner/getOwnerByAddress'](address);
     return peer ? peer.id : undefined;
   },
+  getOwnerByAddress: (state, getters) => (pubKeyAddress: string) => {
+    return state.items.find(el => el.data.pubKeyAddress === pubKeyAddress);
+  },
 };
