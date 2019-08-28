@@ -1,0 +1,32 @@
+import { GetterTree } from 'vuex';
+import { OwnerState } from './types';
+import { RootState } from '../types';
+import { DataPublisher, DataReciever, DataOwner } from '@/lib';
+import { stringify } from 'querystring';
+
+export const getters: GetterTree<OwnerState, RootState> = {
+  getOwner: state => {
+    try {
+      // console.log(Array.from(state.items.values()));
+      return state.items;
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  getOwnerById: (state, getters) => (
+    itemid: string
+  ): { id: string; data: DataOwner } | undefined => {
+    return state.items.find((item: any) => item.id === itemid);
+  },
+  getOwnerByAddress: (state, getters) => (
+    address: string
+  ): { id: string; data: DataOwner } | undefined => {
+    return state.items.find(
+      (item: any) => item.data.subMan.subscriptionRequestAddress === address
+    );
+  },
+  hasOwner: (state, getters) => (id: string): boolean => {
+    const res = getters.getOwnerById(id);
+    return res ? true : false;
+  },
+};

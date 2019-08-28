@@ -20,7 +20,10 @@ export const getters: GetterTree<PublisherState, RootState> = {
   },
   hasPublisher: (state, getters) => (id: string): boolean => {
     const res = getters.getPublisherById(id);
-    console.log(res, id);
     return res ? true : false;
+  },
+  isPublishing: (state, getters) => (id: string): boolean => {
+    const res = getters.getPublisherById(id);
+    return res !== undefined ? res.data.state : false;
   },
 };

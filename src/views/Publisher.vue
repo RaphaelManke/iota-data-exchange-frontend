@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    {{api}}
-    {{ dataPub ? dataPub : 'undefined'}}
+    <ShowCurrentPublisher />
+    <AddDataPublisher />
   </div>
 </template>
 
@@ -15,7 +15,6 @@ import { defaultSeed, defaultSeedPublisher } from '../lib/config';
 import DateTag from '../lib/DateTag';
 import { ntru } from 'ntru';
 import axios from 'axios';
-import { threadId } from 'worker_threads';
 
 @Component({
   components: {
@@ -24,7 +23,7 @@ import { threadId } from 'worker_threads';
     ShowCurrentPublisher,
   },
 })
-export default class Home extends Vue {
+export default class Publisher extends Vue {
   pub: DataPublisher | string = 'undefined';
   bla = 'ABC';
   get dataPub() {
