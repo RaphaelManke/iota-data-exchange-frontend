@@ -53,6 +53,21 @@
           </b-form-group>
         </b-col>
       </b-row>
+      <b-row>
+        <b-col sm="10">
+          <b-form-group id="sensor" description="Select the Sensor">
+            <b-form-select
+              id="input-sensor"
+              v-model="form.sensor"
+              :options="sensorList"
+              required
+              placeholder="Select a Sensor from the selected Owner"
+            ></b-form-select>
+            <!-- <b-form-invalid-feedback :state="validateOwner">Your must select a Owner.</b-form-invalid-feedback>
+            <b-form-valid-feedback :state="validateOwner">Looks Good.</b-form-valid-feedback>-->
+          </b-form-group>
+        </b-col>
+      </b-row>
       <b-button :disabled="!formValid" type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
     </b-form>
@@ -75,10 +90,12 @@ export default class AddRecieverRequest extends Vue {
   @Reciever.Getter('getRecieverById') getRecieverByID!: any;
   @Owner.Getter('getOwner') getOwner!: any;
   @Owner.Getter('getOwnerById') getOwnerById!: any;
+  @Owner.Getter('getPublisherOfOwner') getPublisherOfOwner!: any;
   form = {
     startDate: '',
     endDate: '',
     peer: '',
+    sensor: '',
   };
   show = true;
   async onSubmit(evt: Event) {
@@ -88,6 +105,7 @@ export default class AddRecieverRequest extends Vue {
       start: this.form.startDate.replace(/-/g, ''),
       end: this.form.endDate.replace(/-/g, ''),
       peer: this.form.peer,
+      publisherId: this.form.sensor,
     };
     console.log(request);
     await this.requestAccess(request);
@@ -98,7 +116,11 @@ export default class AddRecieverRequest extends Vue {
       startDate: '',
       endDate: '',
       peer: '',
+      sensor: '',
     };
+  }
+  get sensorList() {
+    return this.getPublisherOfOwner(this.form.peer);
   }
   get peerList() {
     const list = this.getOwner.map(e => e.id);

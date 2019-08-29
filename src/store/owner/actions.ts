@@ -63,7 +63,19 @@ export const actions: ActionTree<OwnerState, RootState> = {
     if (resp.status === 200) {
       const data: any = resp.data;
       console.log(data);
-      // commit('updateOwner', data);
+      commit('updateOwner', data);
+    }
+  },
+  async fetchMessages({ commit, getters }, payload: any): Promise<any> {
+    const owner = getters['getOwnerById'](payload.ownerId);
+    const resp = await Axios.post('/owner/fetchMessages', {
+      id: payload.ownerId,
+      pubId: payload.pubId,
+    });
+    if (resp.status === 200) {
+      const data: any = resp.data;
+      console.log(data);
+      commit('updateOwner', data);
     }
   },
 };

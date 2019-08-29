@@ -36,4 +36,13 @@ export const getters: GetterTree<OwnerState, RootState> = {
 
     return peer ? peer.id : undefined;
   },
+  getPublisherOfOwner: (state, getters, rootState, rootGetters) => (
+    ownerId: string
+  ) => {
+    const res = getters.getOwnerById(ownerId);
+    console.log(res);
+    if (res) {
+      return res.data.dataConnectors.map(e => e[0]);
+    } else return [];
+  },
 };

@@ -39,7 +39,13 @@ export const actions: ActionTree<RecieverState, RootState> = {
   },
   async requestAccess(
     { commit },
-    request: { recieverId: string; start: string; end: string; peer: string }
+    request: {
+      recieverId: string;
+      start: string;
+      end: string;
+      peer: string;
+      publisherId: string;
+    }
   ): Promise<any> {
     const resp = await Axios.post('/reciever/requestAccess', request);
     if (resp.status === 200) {

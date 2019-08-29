@@ -84,6 +84,7 @@ import { generateSeed } from '../lib/iotaUtils';
 import { threadId } from 'worker_threads';
 import Axios from 'axios';
 import { Publisher, Owner } from '@/namespaces';
+import { returnType } from '@iota/core/typings/core/src/composeAPI';
 
 @Component({
   components: {},
@@ -92,6 +93,7 @@ export default class AddDataPublisher extends Vue {
   @Publisher.Action('addPublisher') addPublisher: any;
   @Publisher.Getter('hasPublisher') hasPublisher: any;
   @Owner.Getter('getOwner') getOwner!: any;
+  @Owner.Getter('getPublisherOfOwner') getPublisherOfOwnerGetter!: any;
 
   form = {
     seed: '',
@@ -109,6 +111,9 @@ export default class AddDataPublisher extends Vue {
   }
   generateSeed() {
     this.form.seed = generateSeed();
+  }
+  get getPublisherOfOwner() {
+    return this.getPublisherOfOwnerGetter(this.form.peer);
   }
   get peerList() {
     const list = this.getOwner.map(e => e.id);

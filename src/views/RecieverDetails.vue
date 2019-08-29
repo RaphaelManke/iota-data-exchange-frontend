@@ -36,15 +36,22 @@
                         Start: {{item.msg.startDate}}
                         <br />
                         End: {{item.msg.endDate}}
+                        <br />
+                        NextAddress: {{item.msg.nextAddress}}
                       </b-list-group-item>
                     </b-list-group>
                   </b-list-group-item>
                   <b-list-group-item>
                     <h3>Active Requests</h3>
                     <b-list-group>
-                      <b-list-group-item
-                        v-for="item in activeRequests"
-                      >{{item.msg.startDate}} - {{item.msg.endDate}}</b-list-group-item>
+                      <b-list-group-item v-for="item in activeRequests">
+                        StartRoot: {{item.startRoot}}
+                        <br />
+                        StartDate: {{item.startDate.year}}-{{item.startDate.month}}-{{item.startDate.day}}
+                        <br />
+                        EndDate: {{item.endDate.year}}-{{item.endDate.month}}-{{item.endDate.day}}
+                        <br />
+                      </b-list-group-item>
                     </b-list-group>
                   </b-list-group-item>
                   <b-list-group-item>
@@ -77,7 +84,15 @@
             <b-button v-b-toggle="'collapse-hashstore'" class="m-1">show hashstore</b-button>
 
             <b-collapse id="collapse-hashstore">
-              <b-card>{{reciever.data.hashStore.hashList}}</b-card>
+              <b-card>
+                <b-list-group>
+                  <b-list-group-item v-for="item in hashStore">
+                    Prefix: {{item.prefix}}
+                    <br />
+                    Hash: {{item.hash}}
+                  </b-list-group-item>
+                </b-list-group>
+              </b-card>
             </b-collapse>
           </b-col>
         </b-row>
@@ -130,7 +145,13 @@ export default class RecieverDetails extends Vue {
     this.infoModal.title = '';
     this.infoModal.recieverId = '';
   }
-
+  get hashStore() {
+    try {
+      return this.reciever.data.hashStore.hashList;
+    } catch (error) {
+      return [];
+    }
+  }
   get openRequests() {
     try {
       const data = this.reciever.data.requests.open.map(item => {
@@ -146,8 +167,6 @@ export default class RecieverDetails extends Vue {
   get activeRequests() {
     try {
       const data = this.reciever.data.requests.active.map(item => {
-        Object.setPrototypeOf(item.msg.startDate, DateTag.prototype);
-        Object.setPrototypeOf(item.msg.endDate, DateTag.prototype);
         return item;
       });
       return data;
