@@ -53,4 +53,17 @@ export const actions: ActionTree<OwnerState, RootState> = {
       commit('updateOwner', data);
     }
   },
+  async getNextMessage({ commit, getters }, id: string): Promise<any> {
+    const owner = getters['getOwnerById'](id);
+    const connId = owner.data.dataConnectors[0][0];
+    const resp = await Axios.post('/owner/getNextMessage', {
+      id: id,
+      pubId: connId,
+    });
+    if (resp.status === 200) {
+      const data: any = resp.data;
+      console.log(data);
+      // commit('updateOwner', data);
+    }
+  },
 };

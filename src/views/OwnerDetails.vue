@@ -44,8 +44,10 @@
                   ID: {{sub.id}}
                   <br />Peer:
                   <b-link
+                    v-if="getRecieverByPubKeyAddress(sub.peer)"
                     :to="{ name: 'recieverDetails', params: { recieverId: getRecieverByPubKeyAddress(sub.peer) }}"
                   >{{getRecieverByPubKeyAddress(sub.peer)}}</b-link>
+                  <span v-else>UNKOWN</span>
                   <br />
                   Start: {{sub.startDate}}
                   <br />
@@ -64,6 +66,7 @@
           <b-col sm="2">Aktions</b-col>
           <b-col sm="8">
             <b-button @click="checkRequestAddress(owner.id)">check Requests</b-button>
+            <b-button @click="getNextMessage(owner.id)">getNextMessage</b-button>
           </b-col>
         </b-row>
       </b-card-body>
@@ -85,6 +88,7 @@ import DateTag from '../lib/DateTag';
 })
 export default class OwnerDetails extends Vue {
   @Owner.Action('acceptRequest') acceptRequest!: any;
+  @Owner.Action('getNextMessage') getNextMessage!: any;
   @Owner.Action('checkRequestAddress') checkRequestAddress!: any;
   @Owner.Getter('getOwnerById') getOwnerByID!: any;
   @Owner.Getter('getRecieverByPubKeyAddress') getRecieverByPubKeyAddress!: any;
@@ -92,7 +96,7 @@ export default class OwnerDetails extends Vue {
     return elem.lenght;
   }
   get subscriptionList() {
-    return this.owner.data.subMan.requests.map(e => {
+    return this.owner.data.subMan.accessRequests.map(e => {
       return {
         id: e[0],
         peer: e[1].pubKeyAddress,

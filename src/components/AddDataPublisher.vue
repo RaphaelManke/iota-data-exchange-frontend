@@ -53,6 +53,22 @@
           </b-form-group>
         </b-col>
       </b-row>
+      <b-row>
+        <b-col sm="10">
+          <b-form-group id="peer" description="Select the Owner">
+            <b-form-select
+              id="input-peer"
+              v-model="form.peer"
+              :options="peerList"
+              required
+              placeholder="Select a Owner"
+              :state="validateOwner"
+            ></b-form-select>
+            <b-form-invalid-feedback :state="validateOwner">Your must select a Owner.</b-form-invalid-feedback>
+            <b-form-valid-feedback :state="validateOwner">Looks Good.</b-form-valid-feedback>
+          </b-form-group>
+        </b-col>
+      </b-row>
 
       <b-button :active="formValid" type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
@@ -67,7 +83,7 @@ import { State, Action, Getter } from 'vuex-class';
 import { generateSeed } from '../lib/iotaUtils';
 import { threadId } from 'worker_threads';
 import Axios from 'axios';
-import { Publisher } from '@/namespaces';
+import { Publisher, Owner } from '@/namespaces';
 
 @Component({
   components: {},
@@ -75,11 +91,13 @@ import { Publisher } from '@/namespaces';
 export default class AddDataPublisher extends Vue {
   @Publisher.Action('addPublisher') addPublisher: any;
   @Publisher.Getter('hasPublisher') hasPublisher: any;
+  @Owner.Getter('getOwner') getOwner!: any;
+
   form = {
     seed: '',
     id: '',
     masterSecret: '',
-    checked: [],
+    peer: '',
   };
   show = true;
   async onSubmit(evt: Event) {
@@ -92,6 +110,15 @@ export default class AddDataPublisher extends Vue {
   generateSeed() {
     this.form.seed = generateSeed();
   }
+  get peerList() {
+    const list = this.getOwner.map(e => e.id);
+    console.info(list);
+    return list;
+  }
+  get validateOwner() {
+    return this.form.peer.length > 0;
+  }
+
   get validateSeed() {
     const res = this.form.seed.match('[A-Z9]*');
     // @ts-ignore

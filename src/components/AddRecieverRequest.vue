@@ -46,6 +46,7 @@
               :options="peerList"
               required
               placeholder="Select a Owner"
+              :state="validateOwner"
             ></b-form-select>
             <b-form-invalid-feedback :state="validateOwner">Your must select a Owner.</b-form-invalid-feedback>
             <b-form-valid-feedback :state="validateOwner">Looks Good.</b-form-valid-feedback>
@@ -88,6 +89,7 @@ export default class AddRecieverRequest extends Vue {
       end: this.form.endDate.replace(/-/g, ''),
       peer: this.form.peer,
     };
+    console.log(request);
     await this.requestAccess(request);
   }
   onReset(evt: Event) {

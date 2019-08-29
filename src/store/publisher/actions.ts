@@ -7,12 +7,13 @@ import Axios from 'axios';
 export const actions: ActionTree<PublisherState, RootState> = {
   async addPublisher(
     { commit },
-    { masterSecret, seed, id }: any
+    { masterSecret, seed, id , peer}: any
   ): Promise<any> {
     const resp = await Axios.post('/publisher/add', {
       masterSecret,
       seed,
       id,
+      peer
     });
     if (resp.status === 200) {
       commit('storePublisher', [{ data: resp.data, id: id }]);
