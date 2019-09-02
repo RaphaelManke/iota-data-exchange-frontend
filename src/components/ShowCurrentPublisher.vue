@@ -1,10 +1,7 @@
 <template>
   <b-container>
     <b-table :v-if="ready" :items="getPublisher" :fields="fields">
-      <template slot="state" slot-scope="row">
-        <b-badge v-if="row.item.state">running</b-badge>
-        {{ isPublishing(row.item.id)}}
-      </template>
+      <template slot="state" slot-scope="row">{{ isPublishing(row.item.id)}}</template>
       <template slot="actions" slot-scope="row">
         <b-button variant="success" @click="startPublish(row.item.id)">Start</b-button>
         <b-button variant="danger" @click="stopPublish(row.item.id)">Stop</b-button>
@@ -17,7 +14,7 @@
           class="mr-1"
         >
           Info modal
-          {{ row.item.data.messages.length}}
+          <!-- {{ row.item.data.messages.length}} -->
         </b-button>
       </template>
     </b-table>

@@ -123,8 +123,10 @@
                         :key="message[0]"
                       >
                         Root: {{message[0]}}
-                        <br />
-                        Message: {{message[1]}}
+                        <br />Message:
+                        <span style="text-align:left">
+                          <vue-json-pretty :deep="4" :data="jsonFormat(message[1])"></vue-json-pretty>
+                        </span>
                       </b-list-group-item>
                     </b-list-group>
                   </b-card>
@@ -149,9 +151,12 @@ import { Reciever } from '@/namespaces';
 import { any } from 'bluebird';
 import { returnType } from '@iota/core/typings/core/src/composeAPI';
 import DateTag from '../lib/DateTag';
+// @ts-ignore
+import VueJsonPretty from 'vue-json-pretty';
 @Component({
   components: {
     AddRecieverRequest,
+    VueJsonPretty,
   },
   props: {
     recieverId: String,
@@ -184,6 +189,14 @@ export default class RecieverDetails extends Vue {
     };
     console.info(payload);
     this.fetchMessagesAction(payload);
+  }
+  jsonFormat(s: string) {
+    try {
+      const parsed = JSON.parse(s);
+      return parsed;
+    } catch (error) {
+      return { text: s };
+    }
   }
   get dataConnectors() {
     try {

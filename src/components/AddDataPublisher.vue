@@ -69,8 +69,51 @@
           </b-form-group>
         </b-col>
       </b-row>
+      <b-row>
+        <b-col sm="10">
+          <b-form-group id="dataType" description="Select the Datatype">
+            <b-form-select
+              id="input-dataType"
+              v-model="form.dataType"
+              :options="dataOptions"
+              required
+              placeholder="Select a DataType"
+            ></b-form-select>
+            <b-form-invalid-feedback :state="validateOwner">Your must select a Owner.</b-form-invalid-feedback>
+            <b-form-valid-feedback :state="validateOwner">Looks Good.</b-form-valid-feedback>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row v-if="form.dataType === 'fitbit'">
+        <b-col sm="10">
+          <b-form-group id="fitbitUserId">
+            <b-form-input
+              id="input-fitbitUserId"
+              v-model="form.fitbitUserId"
+              required
+              placeholder="Enter fitbitUserId"
+              :state="validatefitbitUserId"
+            ></b-form-input>
+            <b-form-invalid-feedback :state="validatefitbitUserId">Your fitbitUserId must be set.</b-form-invalid-feedback>
+            <b-form-valid-feedback :state="validatefitbitUserId">Looks Good.</b-form-valid-feedback>
+          </b-form-group>
+          <b-form-group id="fitbitAccessToken">
+            <b-form-input
+              id="input-fitbitAccessToken"
+              v-model="form.fitbitAccessToken"
+              required
+              placeholder="Enter fitbitAccessToken"
+              :state="validatefitbitfitbitAccessToken"
+            ></b-form-input>
+            <b-form-invalid-feedback
+              :state="validatefitbitfitbitAccessToken"
+            >Your fitbitAccessToken must be set.</b-form-invalid-feedback>
+            <b-form-valid-feedback :state="validatefitbitfitbitAccessToken">Looks Good.</b-form-valid-feedback>
+          </b-form-group>
+        </b-col>
+      </b-row>
 
-      <b-button :active="formValid" type="submit" variant="primary">Submit</b-button>
+      <b-button :disabled="!formValid" type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
     </b-form>
   </b-container>
@@ -100,7 +143,14 @@ export default class AddDataPublisher extends Vue {
     id: '',
     masterSecret: '',
     peer: '',
+    dataType: 'timestamp',
+    fitbitUserId: '',
+    fitbitAccessToken: '',
   };
+  dataOptions = [
+    { value: 'timestamp', text: 'Timestamp' },
+    { value: 'fitbit', text: 'Fitbit Data' },
+  ];
   show = true;
   async onSubmit(evt: Event) {
     evt.preventDefault();
@@ -119,6 +169,19 @@ export default class AddDataPublisher extends Vue {
     const list = this.getOwner.map(e => e.id);
     console.info(list);
     return list;
+  }
+  get validatefitbitfitbitAccessToken() {
+    return this.form.fitbitAccessToken.length > 0;
+  }
+  get validatefitbitUserId() {
+    return this.form.fitbitUserId.length > 0;
+  }
+  get validatefitbit() {
+    if (this.form.dataType === 'fitbit') {
+      return this.validatefitbitUserId && this.validatefitbitfitbitAccessToken;
+    } else {
+      return true;
+    }
   }
   get validateOwner() {
     return this.form.peer.length > 0;
@@ -146,7 +209,11 @@ export default class AddDataPublisher extends Vue {
   }
   get formValid() {
     const valid =
-      this.validateSeed && this.validatePubId && this.validateMasterSecret;
+      this.validateSeed &&
+      this.validatePubId &&
+      this.validateMasterSecret &&
+      this.validateOwner &&
+      this.validatefitbit;
     console.info(valid);
     return valid;
   }

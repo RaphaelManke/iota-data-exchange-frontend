@@ -7,16 +7,19 @@ import Axios from 'axios';
 export const actions: ActionTree<PublisherState, RootState> = {
   async addPublisher(
     { commit },
-    { masterSecret, seed, id , peer}: any
+    payload: {
+      seed: string;
+      id: string;
+      masterSecret: string;
+      peer: string;
+      dataType: string;
+      fitbitUserId: string;
+      fitbitAccessToken: string;
+    }
   ): Promise<any> {
-    const resp = await Axios.post('/publisher/add', {
-      masterSecret,
-      seed,
-      id,
-      peer
-    });
+    const resp = await Axios.post('/publisher/add', payload);
     if (resp.status === 200) {
-      commit('storePublisher', [{ data: resp.data, id: id }]);
+      commit('storePublisher', [{ data: resp.data, id: payload.id }]);
     }
   },
   async fetchPublisher({ commit }): Promise<any> {
