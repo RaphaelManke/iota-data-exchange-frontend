@@ -118,7 +118,10 @@
                 <b-collapse :id="`collapse-${item[0]}`">
                   <b-card>
                     <b-list-group>
-                      <b-list-group-item v-for="message in item[1].decryptedMessages">
+                      <b-list-group-item
+                        v-for="message in item[1].decryptedMessages"
+                        :key="message[0]"
+                      >
                         Root: {{message[0]}}
                         <br />
                         Message: {{message[1]}}
