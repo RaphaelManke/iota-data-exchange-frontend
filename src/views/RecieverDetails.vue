@@ -17,7 +17,6 @@
           <b-col sm="8">
             <b-button v-b-toggle="'collapse-requests'" class="m-1">show requests</b-button>
             <b-button
-              size="sm"
               @click="info(reciever.id, reciever.id, $event.target)"
               class="mr-1"
             >Request Access</b-button>
@@ -96,10 +95,39 @@
             </b-collapse>
           </b-col>
         </b-row>
+        <hr />
+
         <b-row>
           <b-col sm="2">Actions</b-col>
           <b-col sm="8">
             <b-button @click="checkOpenRequests(reciever.id)">Check Open Requests</b-button>
+          </b-col>
+        </b-row>
+        <hr />
+
+        <b-row>
+          <b-col sm="2">Data Connections</b-col>
+          <b-col sm="8">
+            <b-list-group>
+              <b-list-group-item v-for="item in dataConnectors" :key="item[0]">
+                {{item[0]}}
+                <br />
+                <b-button @click="fetchMessages(item[0])" class="m-1">fetch messages</b-button>
+                <b-button v-b-toggle="`collapse-${item[0]}`" class="m-1">show messages</b-button>
+
+                <b-collapse :id="`collapse-${item[0]}`">
+                  <b-card>
+                    <b-list-group>
+                      <b-list-group-item v-for="message in item[1].decryptedMessages">
+                        Root: {{message[0]}}
+                        <br />
+                        Message: {{message[1]}}
+                      </b-list-group-item>
+                    </b-list-group>
+                  </b-card>
+                </b-collapse>
+              </b-list-group-item>
+            </b-list-group>
           </b-col>
         </b-row>
       </b-card-body>
@@ -128,6 +156,7 @@ import DateTag from '../lib/DateTag';
 })
 export default class RecieverDetails extends Vue {
   @Reciever.Action('checkOpenRequests') checkOpenRequests!: any;
+  @Reciever.Action('fetchMessages') fetchMessagesAction!: any;
   @Reciever.Getter('getRecieverById') getRecieverByID!: any;
   @Reciever.Getter('getPeerByAddress') getPeerByAddress!: any;
 
@@ -144,6 +173,21 @@ export default class RecieverDetails extends Vue {
   resetInfoModal() {
     this.infoModal.title = '';
     this.infoModal.recieverId = '';
+  }
+  fetchMessages(connId: string) {
+    const payload = {
+      id: this.$props.recieverId,
+      connId,
+    };
+    console.info(payload);
+    this.fetchMessagesAction(payload);
+  }
+  get dataConnectors() {
+    try {
+      return this.reciever.data.dataConnectors;
+    } catch (error) {
+      return [];
+    }
   }
   get hashStore() {
     try {

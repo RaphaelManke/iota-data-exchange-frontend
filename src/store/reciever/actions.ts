@@ -37,6 +37,17 @@ export const actions: ActionTree<RecieverState, RootState> = {
       commit('updateReciever', data);
     }
   },
+  async fetchMessages(
+    { commit },
+    payload: { id: string; connId: string }
+  ): Promise<void> {
+    const resp = await Axios.post('/reciever/fetchMessages', payload);
+    if (resp.status === 200) {
+      const data: any = resp.data;
+      commit('updateReciever', data);
+    }
+  },
+
   async requestAccess(
     { commit },
     request: {
