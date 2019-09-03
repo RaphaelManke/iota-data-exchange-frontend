@@ -8,7 +8,6 @@ export const mutations: MutationTree<OwnerState> = {
       return { id: e.id, data: e.data };
     });
     state.items = [...state.items, ...extracedObjects];
-    console.log(state.items);
   },
 
   loadedOwner(state, payload: any) {
@@ -17,6 +16,5 @@ export const mutations: MutationTree<OwnerState> = {
   updateOwner(state, payload: any) {
     state.items = state.items.filter(e => e.id !== payload.id);
     state.items = [...state.items, payload];
-    console.log(payload);
   },
 };

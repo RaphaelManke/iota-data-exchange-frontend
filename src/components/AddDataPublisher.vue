@@ -158,6 +158,15 @@ export default class AddDataPublisher extends Vue {
   }
   onReset(evt: Event) {
     evt.preventDefault();
+    this.form = {
+      seed: '',
+      id: '',
+      masterSecret: '',
+      peer: '',
+      dataType: 'timestamp',
+      fitbitUserId: '',
+      fitbitAccessToken: '',
+    };
   }
   generateSeed() {
     this.form.seed = generateSeed();
@@ -167,7 +176,6 @@ export default class AddDataPublisher extends Vue {
   }
   get peerList() {
     const list = this.getOwner.map(e => e.id);
-    console.info(list);
     return list;
   }
   get validatefitbitfitbitAccessToken() {
@@ -213,7 +221,6 @@ export default class AddDataPublisher extends Vue {
       this.validateMasterSecret &&
       this.validateOwner &&
       this.validatefitbit;
-    console.info(valid);
     return valid;
   }
 }

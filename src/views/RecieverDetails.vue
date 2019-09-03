@@ -187,7 +187,6 @@ export default class RecieverDetails extends Vue {
       id: this.$props.recieverId,
       connId,
     };
-    console.info(payload);
     this.fetchMessagesAction(payload);
   }
   jsonFormat(s: string) {

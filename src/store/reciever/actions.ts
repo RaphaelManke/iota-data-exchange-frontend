@@ -61,7 +61,6 @@ export const actions: ActionTree<RecieverState, RootState> = {
     const resp = await Axios.post('/reciever/requestAccess', request);
     if (resp.status === 200) {
       const data: any = resp.data;
-      console.info(resp.data);
       commit('updateReciever', data);
     }
   },

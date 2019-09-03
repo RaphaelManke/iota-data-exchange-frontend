@@ -123,7 +123,6 @@ export default class AddRecieverRequest extends Vue {
   }
   get peerList() {
     const list = this.getOwner.map(e => e.id);
-    console.info(list);
     return list;
   }
   get validateOwner() {

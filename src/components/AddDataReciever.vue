@@ -39,7 +39,7 @@
         </b-col>
       </b-row>
 
-      <b-button :active="formValid" type="submit" variant="primary">Submit</b-button>
+      <b-button :disabled="!formValid" type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
     </b-form>
   </b-container>
@@ -71,6 +71,10 @@ export default class AddDataReciever extends Vue {
   }
   onReset(evt: Event) {
     evt.preventDefault();
+    this.form = {
+      seed: '',
+      id: '',
+    };
   }
   generateSeed() {
     this.form.seed = generateSeed();
@@ -91,7 +95,6 @@ export default class AddDataReciever extends Vue {
   }
   get formValid() {
     const valid = this.validateSeed && this.validatePubId;
-    console.info(valid);
     return valid;
   }
 }

@@ -8,7 +8,6 @@ export const mutations: MutationTree<PublisherState> = {
       return { id: e.id, data: e.data };
     });
     state.items = [...state.items, ...extracedObjects];
-    console.log(state.items);
   },
   loadedPublisher(state, payload: any) {
     state.items = payload;
@@ -16,6 +15,5 @@ export const mutations: MutationTree<PublisherState> = {
   updatePublisher(state, payload: any) {
     state.items = state.items.filter(e => e.id !== payload.id);
     state.items = [...state.items, payload];
-    console.log(payload);
   },
 };
