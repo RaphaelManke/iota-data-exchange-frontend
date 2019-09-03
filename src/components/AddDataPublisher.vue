@@ -198,7 +198,6 @@ export default class AddDataPublisher extends Vue {
   get validatePubId() {
     const res = this.form.id.length > 0;
     const unique = !this.publisherExists;
-    console.log(unique);
     // @ts-ignore
     return res && unique;
   }

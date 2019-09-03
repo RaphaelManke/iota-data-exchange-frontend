@@ -107,7 +107,6 @@ export default class AddRecieverRequest extends Vue {
       peer: this.form.peer,
       publisherId: this.form.sensor,
     };
-    console.log(request);
     await this.requestAccess(request);
   }
   onReset(evt: Event) {

@@ -62,7 +62,6 @@ export const actions: ActionTree<OwnerState, RootState> = {
     });
     if (resp.status === 200) {
       const data: any = resp.data;
-      console.log(data);
       commit('updateOwner', data);
     }
   },
@@ -74,7 +73,6 @@ export const actions: ActionTree<OwnerState, RootState> = {
     });
     if (resp.status === 200) {
       const data: any = resp.data;
-      console.log(data);
       commit('updateOwner', data);
     }
   },

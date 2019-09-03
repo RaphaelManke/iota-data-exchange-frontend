@@ -107,7 +107,6 @@ export default class AddDataOwner extends Vue {
   get validatePubId() {
     const res = this.form.id.length > 0;
     const unique = !this.ownerExists;
-    console.log(unique);
     // @ts-ignore
     return res && unique;
   }

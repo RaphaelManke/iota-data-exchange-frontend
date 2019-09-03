@@ -40,7 +40,6 @@ export const getters: GetterTree<OwnerState, RootState> = {
     ownerId: string
   ) => {
     const res = getters.getOwnerById(ownerId);
-    console.log(res);
     if (res) {
       return res.data.dataConnectors.map(e => e[0]);
     } else return [];
