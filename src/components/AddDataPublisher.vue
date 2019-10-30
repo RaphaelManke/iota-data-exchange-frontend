@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <h1>Hello</h1>
+    <h1>Add Data Publisher</h1>
     <b-form @submit="onSubmit" @reset="onReset" v-if="show">
       <b-row>
         <b-col sm="10">

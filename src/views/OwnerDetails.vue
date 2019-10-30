@@ -95,9 +95,11 @@
             <b-collapse id="collapse-messages">
               <b-list-group>
                 <b-list-group-item v-for="msg in messages" v-bind:key="msg[0]">
-                  Address: {{msg[0]}}
-                  <br />
-                  Message: {{msg[1]}}
+                  NextRoot: {{msg[0]}}
+                  <br />Message:
+                  <span style="text-align:left">
+                    <vue-json-pretty :deep="4" :data="jsonFormat(msg[1])"></vue-json-pretty>
+                  </span>
                 </b-list-group-item>
               </b-list-group>
             </b-collapse>
@@ -114,8 +116,13 @@ import { DataPublisher, DataReciever, DataOwner } from '@/lib/';
 import { Owner } from '@/namespaces';
 import { any } from 'bluebird';
 import DateTag from '../lib/DateTag';
+// @ts-ignore
+import VueJsonPretty from 'vue-json-pretty';
+
 @Component({
-  components: {},
+  components: {
+    VueJsonPretty,
+  },
   props: {
     ownerId: String,
   },
@@ -138,6 +145,15 @@ export default class OwnerDetails extends Vue {
   arrLength(elem: any) {
     return elem.lenght;
   }
+  jsonFormat(s: string) {
+    try {
+      const parsed = JSON.parse(s);
+      return parsed;
+    } catch (error) {
+      return { text: s };
+    }
+  }
+
   get subscriptionList() {
     return this.owner.data.subMan.accessRequests.map(e => {
       return {
